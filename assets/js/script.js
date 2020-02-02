@@ -1,4 +1,9 @@
- // global vars
+/************************************************************************
+ Weather data furnished by OpenWeatherMap.org (https://openweathermap.org/terms)
+************************************************************************/ 
+
+
+// global vars
 var cities = [];
 var APIKey = "2260db9c5b04a7ef96e84dc219ae31be";
 var country = "us";
@@ -66,7 +71,6 @@ function DisplayWeatherData (city, country){
      });         
 
      // daily 
-    queryURLd = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "," + country + "&units=imperial&appid=" + APIKey + "&cnt=5";
     queryURLd = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "," + country + "&units=imperial&appid=" + APIKey;
     $.ajax({
         url: queryURLd,
@@ -76,19 +80,18 @@ function DisplayWeatherData (city, country){
         console.log(responseDaily);
         var dateHold = 0;
         var dtYMD    = 0;
+        var currYMD = parseInt(getDateMMDDYYYY(responseDaily.list[0].dt));
         var printed  = 1;
         
-
+        
         for(var i=0; i<responseDaily.cnt; i++){
             //console.log("timestamp: " + responseDaily.list[i].dt);
             var dt    = getDate(responseDaily.list[i].dt);
             var dtYMD = getDateMMDDYYYY(responseDaily.list[i].dt);
-            
-            
-            console.log("dates: "+ dateHold + " != " +  dtYMD);
+//            console.log("dates: "+ dateHold + " != " +  dtYMD + " printed "+ printed + " curYMD " + curYMD) ;
 
-            if(dateHold != dtYMD && printed < 6)
-            {
+            if( (dateHold != dtYMD) && (printed < 6) && (currYMD != dtYMD) )
+            {   
                 if(dateHold === 0) {dateHold = dtYMD;} // first time in
 
                 var icon = responseDaily.list[i].weather[0].icon;
