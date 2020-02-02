@@ -23,16 +23,94 @@
   </head>
 
   <body>
-    <header class="jumbotron">
-      <!--nav here-->
-    </header>
-    <div class="container">
-      <!-- content here -->
-    </div>
 
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+      <!--nav-->
+      <nav class="navbar navbar-expand-lg navbar-light bg-dark text-center margin-bottom ">
+        <a class="navbar-brand text-light font-weight-bolder  mx-auto" href="index.html">Weather Dashboard</a>
+        </div>     
+      </nav>
+
+
+    
+    <div class="container">
+
+      <!-- content here -->
+      <div class="row rowtop">
+
+          <!-- column contains search and saved cities-->
+          <div class="col-md-4 bg-light border rounded-sm margin-right">
+
+              <div id="search" class="margin-bottom">
+
+                <!-- city search box-->
+                <form id="city-form">
+                  <label for="city-input">Search for a City:</label>
+                  <input type="text" id="city-input">
+
+                  <button class="btn" id="add-city">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
+                </form>      
+
+
+              </div>
+              <!-- city buttons here -->
+              <div id="city-view">
+             </div>
+
+          </div> <!--end search and saved cities-->
+          
+          
+
+          <!--column contains selected city and forcast and 5 day forecast-->
+          <div class="col-md-8">
+
+            <!-- two main rows in this column-->
+             <div class="row">
+                <div class="col-sm-12">
+                  
+
+                                  <!--current forcast row-->                
+                                  <div class="row">
+                                    <div id="current-forecast" class="col-sm-12 border primary rounded-sm margin-bottom p-2">
+                                    </div>
+                                </div>             
+            
+                                <!-- 5 day forecast row-->   
+                                <div class="row">
+                                    <div class="col-sm-12 border primary rounded-sm p-2">
+                                        <div class="row"><div class="col-sm-12"><h5>5-day forcast</h5></div></div>                        
+                                        <div class="row"><div  class="col-sm-12">
+                                          
+                                          <div class="row" id="five-day-forecast">
+
+                                          </div class="row">
+
+
+                                        </div></div>
+                                    </div>  
+                                </div>      
+
+
+                    
+
+
+
+
+                </div>
+            </div>
+
+          </div><!-- end city 5 day forecast-->
+      
+     </div> <!--end row top-->
+
+  </div> <!--end eontainer-->   
+
+    <!-- <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-    <script src="./assets/js/planner.js"></script>
+    <script scr="./assets/js/script.js"></script>
+    <script src="./assets/js/script.js"></script>
 
 
   </body>
