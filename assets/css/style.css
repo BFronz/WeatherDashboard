@@ -18,7 +18,9 @@ body {
 .margin-bottom {
     margin-bottom: 25px;
 }
-
+.spacer-column {
+    max-width: 25px;
+}
 
 
 
@@ -86,6 +88,10 @@ body {
     color: white;
     font-size: 14px;
     border-radius: 3px;
+}
+.warning {
+    color: red;
+    font-size: 14px;
 
 }
 

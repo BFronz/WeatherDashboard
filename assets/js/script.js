@@ -1,8 +1,8 @@
  // global vars
 var cities = [];
 var APIKey = "2260db9c5b04a7ef96e84dc219ae31be";
-var queryURL = "";
-var country = "us"
+var country = "us";
+
  
 
 // 3 AJAX calls to the OpenWeatherMap API Current, Daily and UVI, display data accordingly
@@ -14,8 +14,8 @@ function DisplayWeatherData (city, country){
         url: queryURLc,
         method: "GET"
     }).then(function(response) {
-        //console.log(queryURLc);
-        //console.log(response);
+        console.log(queryURLc);
+        console.log(response);
 
         var dt = getDate(response.dt);
 
@@ -63,53 +63,62 @@ function DisplayWeatherData (city, country){
          });
 
          
-
      });         
 
      // daily 
     queryURLd = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "," + country + "&units=imperial&appid=" + APIKey + "&cnt=5";
+    queryURLd = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "," + country + "&units=imperial&appid=" + APIKey;
     $.ajax({
         url: queryURLd,
         method: "GET"
     }).then(function(responseDaily) {
         console.log(queryURLd);
         console.log(responseDaily);
-
-        for(var i=0; i<responseDaily.cnt; i++){
-
-            var dt = getDate(responseDaily.list[i].dt);
-            var icon = responseDaily.list[i].weather[0].icon;
-            var temp = responseDaily.list[i].main.temp.toFixed(1) ;
-            var humid = responseDaily.list[i].main.humidity.toFixed(1);
-
-           
-           
-            var dayCol = $("<div class='col-sm-2 dayColExtra'>"); 
+        var dateHold = 0;
+        var dtYMD    = 0;
+        var printed  = 1;
         
 
-            var divInfo = $("<div class='each-day'>");
-            dayCol.append(divInfo);
-
-            var pDt = $("<p class='pStyle'>").text(dt);
-            divInfo.append(pDt);
-
-
-            var wURL = "http://openweathermap.org/img/wn/" + icon + ".png";        
-            var icoN = $("<p class='pStyle'><img src='"+ wURL +"'>  </p>");
-            pDt.append(icoN);
-
-
-            var tmP = $("<p class='pStyle'>" + temp + "&#8457;</p>");
-            icoN.append(tmP);
+        for(var i=0; i<responseDaily.cnt; i++){
+            //console.log("timestamp: " + responseDaily.list[i].dt);
+            var dt    = getDate(responseDaily.list[i].dt);
+            var dtYMD = getDateMMDDYYYY(responseDaily.list[i].dt);
             
-            var huM = $("<p class='pStyle'>" + humid + "%</p>");
-            icoN.append(huM);
-
-           $("#five-day-forecast").append(dayCol);
-           
             
+            console.log("dates: "+ dateHold + " != " +  dtYMD);
 
+            if(dateHold != dtYMD && printed < 6)
+            {
+                if(dateHold === 0) {dateHold = dtYMD;} // first time in
 
+                var icon = responseDaily.list[i].weather[0].icon;
+                var temp = responseDaily.list[i].main.temp.toFixed(1) ;
+                var humid = responseDaily.list[i].main.humidity.toFixed(1);
+          
+                var dayCol = $("<div class='col-sm-2 dayColExtra'>"); 
+        
+                var divInfo = $("<div class='each-day'>");
+                dayCol.append(divInfo);
+
+                var pDt = $("<p class='pStyle'>").text(dt);
+                divInfo.append(pDt);
+
+                var wURL = "http://openweathermap.org/img/wn/" + icon + ".png";        
+                var icoN = $("<p class='pStyle'><img src='"+ wURL +"'>  </p>");
+                pDt.append(icoN);
+
+                var tmP = $("<p class='pStyle'>" + temp + "&#8457;</p>");
+                icoN.append(tmP);
+            
+                var huM = $("<p class='pStyle'>" + humid + "%</p>");
+                icoN.append(huM);
+
+                $("#five-day-forecast").append(dayCol);
+
+                dateHold = dtYMD;
+                printed ++;
+            }
+            
 
         }
         var col = $("<div class='col-sm-1'>"); // last column
@@ -154,6 +163,21 @@ function getDate(timestamp){
     var mdy = month + '/'  + date + '/'  + year  ;
     return mdy;
   }
+  function getDateMMDDYYYY(timestamp){
+    var a = new Date(timestamp * 1000);
+    var months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
+    var yr  = a.getFullYear();
+    var mth = months[a.getMonth()];
+    var dy  = a.getDate();  
+    parseInt(mth);
+    parseInt(dy);
+    parseInt(yr);
+    var mdy = yr;
+    mdy += mth;
+    mdy += dy;
+    return mdy;
+  } 
+
 
 
 
@@ -169,7 +193,7 @@ function getDate(timestamp){
         cities.unshift(city);
     }
       else {
-        alert("You already have this city in your list. Try another.");  
+        $(".warning").text("You already have this city in your list. Try another.");  
         return 
     }
 
@@ -198,7 +222,7 @@ $(document).on("click", ".city-btn", function(){
     event.preventDefault();
     var city = $(this).attr("data-name");
     console.log("city button presssed: " +city);
-    $("#current-forecast, #ive-day-forecast,  .each-day, .pStyle, .dayColExtra").empty();
+    $("#current-forecast, #ive-day-forecast,  .each-day, .pStyle, .dayColExtra, .warning").empty();
     DisplayWeatherData (city, country);
 });
 
@@ -209,7 +233,7 @@ $(document).on("click", ".city-btn", function(){
  // loop throuh cities and display
  function renderCities() {
 
-    $("#city-view, #current-forecast, #ive-day-forecast, .each-day, .pStyle, .dayColExtra").empty();
+    $("#city-view, #current-forecast, #ive-day-forecast, .each-day, .pStyle, .dayColExtra, .warning").empty();
 
     var cityArr  = JSON.parse(localStorage.getItem("MyCities"));
 
