@@ -1,6 +1,6 @@
 # WeatherDashboard
 
-Weather application that displays current and 5-day forecasts for multiple saved cities. Searched cities are saved. OpenWeather API is used to retrieve weather data for cities. All weather is up to date often less that 3 hours old.
+Weather application that displays current and 5-day forecasts for US cities. Searched cities are saved. OpenWeather API is used to retrieve weather data for cities. All weather is up to date often less that 3 hours old.
 
  
 ### Installing
