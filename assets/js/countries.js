@@ -1,3 +1,5 @@
+// eventually plan to add countries
+
 var isoCountries = {
     'AF' : 'Afghanistan',
     'AX' : 'Aland Islands',

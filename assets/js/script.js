@@ -66,7 +66,6 @@ function DisplayWeatherData (city, country){
             var u = $("<div class='smalltype'>UV Index: <span class=" + spnCl + ">" + responseUVI.value + "</spn>");
             $("#current-forecast").append(u);            
          });
-
          
      });         
 
@@ -88,7 +87,7 @@ function DisplayWeatherData (city, country){
             //console.log("timestamp: " + responseDaily.list[i].dt);
             var dt    = getDate(responseDaily.list[i].dt);
             var dtYMD = getDateMMDDYYYY(responseDaily.list[i].dt);
-//            console.log("dates: "+ dateHold + " != " +  dtYMD + " printed "+ printed + " curYMD " + curYMD) ;
+             //console.log("dates: "+ dateHold + " != " +  dtYMD + " printed "+ printed + " curYMD " + curYMD) ;
 
             if( (dateHold != dtYMD) && (printed < 6) && (currYMD != dtYMD) )
             {   
@@ -120,17 +119,12 @@ function DisplayWeatherData (city, country){
 
                 dateHold = dtYMD;
                 printed ++;
-            }
-            
+            }           
 
         }
         var col = $("<div class='col-sm-1'>"); // last column
         $("#five-day-forecast").append(col);
          
-
-        
-
-
     });    
         
 }   
@@ -138,20 +132,19 @@ function DisplayWeatherData (city, country){
 
 
 
-
+// error check need to be better
 function CheckCity (city, country){
-
-    alert ("checkcity "+ city);
-     queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "," + country + "&units=imperial&appid=" + APIKey;
-     $.ajax({
-        url: queryURL,
-        method: "GET"
-    }).then(function(response) {
-        
-
-        alert (response.name);
+  
+    queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "," + country + "&units=imperial&appid=" + APIKey;
+    $.ajax({
+        type: "get", url: queryURL ,
+        success: function (data, text) {
+        },
+        error: function (request, status, error) {
+            console.log(request.responseText); 
+            $(".warning").text("Looks like this city is not found. Try another.");           
+        }
     });
-
    
 }
 
@@ -166,6 +159,8 @@ function getDate(timestamp){
     var mdy = month + '/'  + date + '/'  + year  ;
     return mdy;
   }
+
+  // get YYYYMMDD from timestamp
   function getDateMMDDYYYY(timestamp){
     var a = new Date(timestamp * 1000);
     var months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
@@ -182,16 +177,21 @@ function getDate(timestamp){
   } 
 
 
-
-
-
- // check if search word submitted, clean it, check if it already in the array if ok add to array and push to local storage 
+ // check if search word submitted, clean it, 
+ //check if it already in the array if ok add to array and push to local storage 
+ // some error checking
  $("#add-city").on("click", function(event) {
     event.preventDefault();
     var city = $("#city-input").val().trim();
 
-    city = CleanInput(city);   
+    if(city==="") {
+        $(".warning").text("You need to enter a city. Try another.");  
+    return }
 
+    city = CleanInput(city); 
+    
+    CheckCity (city, country);
+    
     if (cities.indexOf(city) === -1) {    
         cities.unshift(city);
     }
@@ -199,7 +199,7 @@ function getDate(timestamp){
         $(".warning").text("You already have this city in your list. Try another.");  
         return 
     }
-
+ 
     localStorage.setItem("MyCities", JSON.stringify(cities));
 
     renderCities();
@@ -214,7 +214,7 @@ function CleanInput(str) {
     words[i] = words[i].charAt(0).toUpperCase() + words[i].substring(1);     
     }
     cleanWord = words.join(' '); 
-    //chkCity = CheckCity (cleanWord, country);
+    
     return cleanWord;
 } 
 
@@ -264,8 +264,6 @@ $(document).on("click", ".city-btn", function(){
 
 // pulls last searched city from array or if  empty message to start
 function init() {   
-  
-  
   
     if(cities.length > 0) {
         curCity = cities[0];
