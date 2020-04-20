@@ -20,6 +20,8 @@ Download Html, CSS and JS files.
 Searched cities are saved for future reference. No limits on searches. Current and 5-day forecasts are displayed. Responsive layout. Fast and simple. Visually appealing  UI.
 
 
+<img src="assets/project-weatherdashboard.png" alt="weather-dashboard">
+
 
 ## Acknowledgments
 
